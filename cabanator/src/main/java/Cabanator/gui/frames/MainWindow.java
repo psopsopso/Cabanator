@@ -1,0 +1,1458 @@
+package Cabanator.gui.frames;
+
+import Cabanator.domain.cabanon.CabanonController;
+import Cabanator.domain.cabanon.Entremises;
+import Cabanator.gui.panels.DrawingPanel;
+import Cabanator.domain.cabanon.mur.Mur;
+import Cabanator.domain.cabanon.mur.Ouverture;
+import Cabanator.domain.drawing.MurDrawer;
+import Cabanator.domain.drawing.PlancherDrawer;
+import Cabanator.domain.util;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+public class MainWindow extends javax.swing.JFrame {
+
+    private CabanonController controller;
+    //private DrawingPanel drawingPanel;
+
+    public Point actualMousePoint;
+    public Point delta = new Point(0, 0);
+
+    private JFileChooser loadFile;
+    private JFileChooser saveFile;
+    private JOptionPane quitOptionPane;
+    private int BASE_SPACING = 6;
+    private String vueSelection = "Plancher";
+    // Cabanon
+    private double cabanonLongueurField;
+    private double cabanonLargeurField;
+    private double cabanonHauteurField;
+    // Plancher
+    private double plancherDistanceSolives;
+    private boolean plancherIsEntremises;
+    // Mur
+    private double distanceMontantsOuvertureMur = 32;
+    private double distanceMontantsMur = 32;
+    private boolean murIsEntremises = false;
+    // Ouvertures
+    private double ouvertureLargeur;
+    private double ouvertureLongueur;
+    private String linteauSize = "";
+    private boolean isGrilleToggled = false;
+    private ApplicationMode actualMode;
+    private MurDisplay murDisplay;
+    // Toit
+    private double angle;
+    private double taillePorteAFaux;
+
+    public enum ApplicationMode {
+        SELECT, ADD, DELETE
+    }
+
+    public enum MurDisplay {
+        NORD,
+        SUD,
+        EST,
+        OUEST,
+        PLANCHER
+    }
+
+    public MainWindow() {
+        controller = CabanonController.getInstance();
+        //drawingPanel = new DrawingPanel();
+
+        loadFile = new JFileChooser();
+        loadFile.setDialogTitle("Load...");
+        saveFile = new JFileChooser();
+        saveFile.setDialogTitle("Save as...");
+        quitOptionPane = new JOptionPane();
+        
+
+        initComponents();
+
+    }
+
+    // BASICS
+    public String getVueSelection() {
+        return vueSelection;
+    }
+
+    public CabanonController getController() {
+        return controller;
+    }
+
+    public int getDRAWING_PANEL_WIDTH() {
+        return jScrollMainScrollPane.getWidth();
+    }
+
+    public int getDRAWING_PANEL_HEIGHT() {
+        return jScrollMainScrollPane.getHeight();
+    }
+
+    public int getBASE_SPACING() {
+        return BASE_SPACING;
+    }
+
+    // CABANON
+    public double getCabanonLongueurField() {
+        return controller.getCabanonLongueur();
+    }
+
+    public double getCabanonLargeurField() {
+        return controller.getCabanonLargeur();
+    }
+
+    public double getCabanonHauteurField() {
+        return controller.getCabanonHauteur();
+    }
+
+    // PLANCHER
+    public boolean getplancherIsEntremises() {
+        return plancherIsEntremises;
+    }
+
+    public double getPlancherDistanceSolives() {
+        return controller.getDistanceSolive();
+    }
+
+    // MUR
+    public double getDistanceMontantsOuvertureMur() {
+        return distanceMontantsOuvertureMur;
+    }
+
+    public double getDistanceMontantsMur() {
+        return controller.getDistanceMontant();
+    }
+
+    public boolean getMurIsEntremises() {
+        return murIsEntremises;
+    }
+    // OUVERTURES
+
+    public double getOuvertureLargeur() {
+        return ouvertureLargeur;
+    }
+
+    public double getOuvertureLongueur() {
+        return ouvertureLongueur;
+    }
+
+    public String getLinteauSize() {
+        return linteauSize;
+    }
+
+    public boolean getGrilleToggled() {
+        return isGrilleToggled;
+    }
+
+    public void setMode(ApplicationMode newMode) {
+        this.actualMode = newMode;
+    }
+
+    public void setMurDisplay(MurDisplay newMurDisplay) {
+        this.murDisplay = newMurDisplay;
+    }
+
+    public double getAngleToitDevant() {
+        return controller.getAngleToit();
+    }
+
+    public double getTaillePorteAFaux() {
+        return controller.getTaillePorteAFaux();
+    }
+    
+    public double getDistanceFerme()
+    {
+        return controller.getDistanceFerme();
+    }
+    public double getDistanceExtremite()
+    {
+        return controller.getDistanceExtremite();
+    }
+
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanelMainPanel = new javax.swing.JPanel();
+        jPanelbuttonTopPanel = new javax.swing.JPanel();
+        jLabelChoixVue = new javax.swing.JLabel();
+        SelectionVue = new javax.swing.JComboBox<>();
+        jToggleAfficherGrille = new javax.swing.JToggleButton();
+        jToggleSelectionner = new javax.swing.JToggleButton();
+        jToggleSupprimer = new javax.swing.JToggleButton();
+        jToggleAjouter = new javax.swing.JToggleButton();
+        jComboBoxChoisirOuverture = new javax.swing.JComboBox<>();
+        jPanel1 = new javax.swing.JPanel();
+        jLabelXValueRes = new javax.swing.JLabel();
+        jLabelYValueRes = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0));
+        jLabelXValue = new javax.swing.JLabel();
+        jTextFieldGrille = new javax.swing.JTextField();
+        jScrollMainScrollPane = new javax.swing.JScrollPane();
+        drawingPanel = new Cabanator.gui.panels.DrawingPanel(this);
+        jPanelLeftPanel = new javax.swing.JPanel();
+        jTabbedPaneContainer = new javax.swing.JTabbedPane();
+        TabCabanon = new javax.swing.JPanel();
+        jLabelCabanonLongueur = new javax.swing.JLabel();
+        jLabelCabanonLargeur = new javax.swing.JLabel();
+        jLabelCabanonHauteur = new javax.swing.JLabel();
+        jTextFieldCabanonLongueur = new javax.swing.JTextField();
+        jTextFieldCabanonLargeur = new javax.swing.JTextField();
+        jTextFieldCabanonHauteur = new javax.swing.JTextField();
+        jLabelTaillePieces = new javax.swing.JLabel();
+        jTextFieldTaillePieces = new javax.swing.JTextField();
+        TabPlancher = new javax.swing.JPanel();
+        jLabelDistanceSolives = new javax.swing.JLabel();
+        jTextFieldDistanceSolives = new javax.swing.JTextField();
+        TabMur = new javax.swing.JPanel();
+        jLabelDistanceMontants = new javax.swing.JLabel();
+        jTextFieldDistanceMontantsOuverture = new javax.swing.JTextField();
+        jSeparator4 = new javax.swing.JSeparator();
+        jLabelOuvertureHauteur = new javax.swing.JLabel();
+        jLabelOuvertureLargeur = new javax.swing.JLabel();
+        jLabelOuvertureLinteau = new javax.swing.JLabel();
+        jTextFieldOuvertureHauteur = new javax.swing.JTextField();
+        jTextFieldOuvertureLargeur = new javax.swing.JTextField();
+        jComboBoxLinteau = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jLabelDistanceMontantsMur = new javax.swing.JLabel();
+        jTextFieldDistanceMontantsMur = new javax.swing.JTextField();
+        TabToit = new javax.swing.JPanel();
+        jLabelToitAngle = new javax.swing.JLabel();
+        jLabelDistanceFerme = new javax.swing.JLabel();
+        jLabelToitPorteFaux = new javax.swing.JLabel();
+        jTextFieldToitAngle = new javax.swing.JTextField();
+        jTextFieldDistanceFerme = new javax.swing.JTextField();
+        jTextFieldToitPorteFaux = new javax.swing.JTextField();
+        jLabelExtremite = new javax.swing.JLabel();
+        jTextFieldExtremite = new javax.swing.JTextField();
+        jLabelEntremiseToit = new javax.swing.JLabel();
+        jTextFieldEntremiseToit = new javax.swing.JTextField();
+        jMenuBar = new javax.swing.JMenuBar();
+        jMenuFichier = new javax.swing.JMenu();
+        jMenuItemNouveau = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemOuvrir = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemEnregistrer = new javax.swing.JMenuItem();
+        jMenuExporterPieces = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemQuitter = new javax.swing.JMenuItem();
+        jMenuEdition = new javax.swing.JMenu();
+        jMenuAnnuler = new javax.swing.JMenuItem();
+        jMenuRetablir = new javax.swing.JMenuItem();
+        jMenuItemClearMemLeak = new javax.swing.JMenuItem();
+
+        buttonGroup1.add(jToggleSelectionner);
+        buttonGroup1.add(jToggleAjouter);
+        buttonGroup1.add(jToggleSupprimer);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
+            }
+        });
+
+        jPanelMainPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanelMainPanel.setPreferredSize(new java.awt.Dimension(1800, 876));
+        jPanelMainPanel.setLayout(new java.awt.BorderLayout());
+
+        jPanelbuttonTopPanel.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jPanelbuttonTopPanel.setPreferredSize(new java.awt.Dimension(401, 35));
+
+        jLabelChoixVue.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelChoixVue.setText("Choix de vue:");
+
+        SelectionVue.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        SelectionVue.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Plancher", "Mur Ouest", "Mur Est", "Mur Nord", "Mur Sud", "Toit Devant", "Toit Dessus" }));
+        SelectionVue.setMaximumSize(new java.awt.Dimension(96, 23));
+        SelectionVue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectionVueActionPerformed(evt);
+            }
+        });
+
+        jToggleAfficherGrille.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jToggleAfficherGrille.setText("Afficher grille");
+        jToggleAfficherGrille.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleAfficherGrilleActionPerformed(evt);
+            }
+        });
+
+        jToggleSelectionner.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jToggleSelectionner.setText("Sélectionner");
+        jToggleSelectionner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleSelectionnerActionPerformed(evt);
+            }
+        });
+
+        jToggleSupprimer.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jToggleSupprimer.setText("Supprimer");
+        jToggleSupprimer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleSupprimerActionPerformed(evt);
+            }
+        });
+
+        jToggleAjouter.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jToggleAjouter.setText("Ajouter");
+        jToggleAjouter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleAjouterActionPerformed(evt);
+            }
+        });
+
+        jComboBoxChoisirOuverture.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jComboBoxChoisirOuverture.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Porte", "Fenêtre", "Entremise" }));
+        jComboBoxChoisirOuverture.setMaximumSize(new java.awt.Dimension(100, 23));
+        jComboBoxChoisirOuverture.setMinimumSize(new java.awt.Dimension(100, 23));
+        jComboBoxChoisirOuverture.setPreferredSize(new java.awt.Dimension(100, 23));
+        jComboBoxChoisirOuverture.setVisible(false);
+        jComboBoxChoisirOuverture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxChoisirOuvertureActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jPanel1.add(jLabelXValueRes);
+        jPanel1.add(jLabelYValueRes);
+
+        jLabelXValue.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelXValue.setText("X:Y");
+
+        jTextFieldGrille.setText("25");
+        jTextFieldGrille.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldGrille.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldGrilleActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelbuttonTopPanelLayout = new javax.swing.GroupLayout(jPanelbuttonTopPanel);
+        jPanelbuttonTopPanel.setLayout(jPanelbuttonTopPanelLayout);
+        jPanelbuttonTopPanelLayout.setHorizontalGroup(
+            jPanelbuttonTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelbuttonTopPanelLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabelChoixVue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SelectionVue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(186, 186, 186)
+                .addComponent(jToggleAfficherGrille)
+                .addGap(4, 4, 4)
+                .addComponent(jTextFieldGrille, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jToggleSelectionner)
+                .addGap(71, 71, 71)
+                .addComponent(jToggleSupprimer)
+                .addGap(65, 65, 65)
+                .addComponent(jToggleAjouter)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBoxChoisirOuverture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(124, 124, 124)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelXValue)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanelbuttonTopPanelLayout.setVerticalGroup(
+            jPanelbuttonTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelbuttonTopPanelLayout.createSequentialGroup()
+                .addGroup(jPanelbuttonTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelbuttonTopPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelbuttonTopPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelbuttonTopPanelLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanelbuttonTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelbuttonTopPanelLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(jLabelChoixVue))
+                            .addComponent(SelectionVue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanelbuttonTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jToggleAfficherGrille)
+                                .addComponent(jTextFieldGrille, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelbuttonTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jToggleSelectionner)
+                                .addComponent(jToggleAjouter)
+                                .addComponent(jComboBoxChoisirOuverture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jToggleSupprimer))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelbuttonTopPanelLayout.createSequentialGroup()
+                .addComponent(jLabelXValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanelMainPanel.add(jPanelbuttonTopPanel, java.awt.BorderLayout.PAGE_START);
+
+        jScrollMainScrollPane.setBackground(new java.awt.Color(204, 204, 204));
+        jScrollMainScrollPane.setMaximumSize(new java.awt.Dimension(1, 1));
+        jScrollMainScrollPane.setPreferredSize(new java.awt.Dimension(1, 1));
+
+        drawingPanel.setPreferredSize(new java.awt.Dimension(2800, 1600));
+        drawingPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                drawingPanelMouseDragged(evt);
+            }
+        });
+        drawingPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                drawingPanelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout drawingPanelLayout = new javax.swing.GroupLayout(drawingPanel);
+        drawingPanel.setLayout(drawingPanelLayout);
+        drawingPanelLayout.setHorizontalGroup(
+            drawingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 2800, Short.MAX_VALUE)
+        );
+        drawingPanelLayout.setVerticalGroup(
+            drawingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1600, Short.MAX_VALUE)
+        );
+
+        jScrollMainScrollPane.setViewportView(drawingPanel);
+
+        jPanelMainPanel.add(jScrollMainScrollPane, java.awt.BorderLayout.CENTER);
+
+        jTabbedPaneContainer.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+
+        jLabelCabanonLongueur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelCabanonLongueur.setText("Longueur");
+
+        jLabelCabanonLargeur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelCabanonLargeur.setText("Largeur");
+
+        jLabelCabanonHauteur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelCabanonHauteur.setText("Hauteur");
+
+        jTextFieldCabanonLongueur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldCabanonLongueur.setText("192.0");
+        jTextFieldCabanonLongueur.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTextFieldCabanonLongueur.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldCabanonLongueur.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldCabanonLongueur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldCabanonLongueurActionPerformed(evt);
+            }
+        });
+
+        jTextFieldCabanonLargeur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldCabanonLargeur.setText("192.0");
+        jTextFieldCabanonLargeur.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTextFieldCabanonLargeur.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldCabanonLargeur.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldCabanonLargeur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldCabanonLargeurActionPerformed(evt);
+            }
+        });
+
+        jTextFieldCabanonHauteur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldCabanonHauteur.setText("192.0");
+        jTextFieldCabanonHauteur.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTextFieldCabanonHauteur.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldCabanonHauteur.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldCabanonHauteur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldCabanonHauteurActionPerformed(evt);
+            }
+        });
+
+        jLabelTaillePieces.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelTaillePieces.setText("Taille des pièces");
+
+        jTextFieldTaillePieces.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldTaillePieces.setText("192.0");
+        jTextFieldTaillePieces.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTextFieldTaillePieces.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldTaillePieces.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldTaillePieces.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTaillePiecesActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout TabCabanonLayout = new javax.swing.GroupLayout(TabCabanon);
+        TabCabanon.setLayout(TabCabanonLayout);
+        TabCabanonLayout.setHorizontalGroup(
+            TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabCabanonLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelCabanonHauteur)
+                    .addComponent(jLabelCabanonLargeur, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelCabanonLongueur, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelTaillePieces))
+                .addGap(51, 51, 51)
+                .addGroup(TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldTaillePieces, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jTextFieldCabanonHauteur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldCabanonLargeur, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldCabanonLongueur, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(121, Short.MAX_VALUE))
+        );
+        TabCabanonLayout.setVerticalGroup(
+            TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabCabanonLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelCabanonLongueur)
+                    .addComponent(jTextFieldCabanonLongueur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelCabanonLargeur)
+                    .addComponent(jTextFieldCabanonLargeur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelCabanonHauteur)
+                    .addComponent(jTextFieldCabanonHauteur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(TabCabanonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelTaillePieces)
+                    .addComponent(jTextFieldTaillePieces, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(622, Short.MAX_VALUE))
+        );
+
+        jTabbedPaneContainer.addTab("Cabanon", TabCabanon);
+
+        jLabelDistanceSolives.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelDistanceSolives.setText("Distance solives");
+
+        jTextFieldDistanceSolives.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldDistanceSolives.setText("48.0");
+        jTextFieldDistanceSolives.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldDistanceSolives.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldDistanceSolivesActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout TabPlancherLayout = new javax.swing.GroupLayout(TabPlancher);
+        TabPlancher.setLayout(TabPlancherLayout);
+        TabPlancherLayout.setHorizontalGroup(
+            TabPlancherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabPlancherLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelDistanceSolives)
+                .addGap(18, 18, 18)
+                .addComponent(jTextFieldDistanceSolives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(158, Short.MAX_VALUE))
+        );
+        TabPlancherLayout.setVerticalGroup(
+            TabPlancherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabPlancherLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(TabPlancherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelDistanceSolives)
+                    .addComponent(jTextFieldDistanceSolives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(756, Short.MAX_VALUE))
+        );
+
+        jTabbedPaneContainer.addTab("Plancher", TabPlancher);
+
+        jLabelDistanceMontants.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelDistanceMontants.setText("Distance montants Ouverture");
+
+        jTextFieldDistanceMontantsOuverture.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldDistanceMontantsOuverture.setText("12.0");
+        jTextFieldDistanceMontantsOuverture.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldDistanceMontantsOuverture.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldDistanceMontantsOuverture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldDistanceMontantsOuvertureActionPerformed(evt);
+            }
+        });
+
+        jLabelOuvertureHauteur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelOuvertureHauteur.setText("Hauteur");
+
+        jLabelOuvertureLargeur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelOuvertureLargeur.setText("Largeur");
+
+        jLabelOuvertureLinteau.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelOuvertureLinteau.setText("Linteau");
+
+        jTextFieldOuvertureHauteur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldOuvertureHauteur.setText("25.0");
+        jTextFieldOuvertureHauteur.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldOuvertureHauteur.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldOuvertureHauteur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldOuvertureHauteurActionPerformed(evt);
+            }
+        });
+
+        jTextFieldOuvertureLargeur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldOuvertureLargeur.setText("25.0");
+        jTextFieldOuvertureLargeur.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldOuvertureLargeur.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldOuvertureLargeur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldOuvertureLargeurActionPerformed(evt);
+            }
+        });
+
+        jComboBoxLinteau.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jComboBoxLinteau.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2x6", "2x8", "2x10" }));
+        jComboBoxLinteau.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxLinteauActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabel15.setText("Ouvertures");
+
+        jLabelDistanceMontantsMur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelDistanceMontantsMur.setText("Distance montants");
+
+        jTextFieldDistanceMontantsMur.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldDistanceMontantsMur.setText("24.0");
+        jTextFieldDistanceMontantsMur.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldDistanceMontantsMur.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldDistanceMontantsMur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldDistanceMontantsMurActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout TabMurLayout = new javax.swing.GroupLayout(TabMur);
+        TabMur.setLayout(TabMurLayout);
+        TabMurLayout.setHorizontalGroup(
+            TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabMurLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator4)
+                    .addGroup(TabMurLayout.createSequentialGroup()
+                        .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(TabMurLayout.createSequentialGroup()
+                                .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelOuvertureLinteau)
+                                    .addComponent(jLabelOuvertureHauteur)
+                                    .addComponent(jLabelOuvertureLargeur))
+                                .addGap(47, 47, 47)
+                                .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldOuvertureLargeur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldOuvertureHauteur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBoxLinteau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel15)
+                            .addGroup(TabMurLayout.createSequentialGroup()
+                                .addComponent(jLabelDistanceMontantsMur)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldDistanceMontantsMur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(TabMurLayout.createSequentialGroup()
+                                .addComponent(jLabelDistanceMontants)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldDistanceMontantsOuverture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 63, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        TabMurLayout.setVerticalGroup(
+            TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabMurLayout.createSequentialGroup()
+                .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelDistanceMontantsMur)
+                    .addComponent(jTextFieldDistanceMontantsMur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(172, 172, 172)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel15)
+                .addGap(31, 31, 31)
+                .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelOuvertureHauteur)
+                    .addComponent(jTextFieldOuvertureHauteur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelOuvertureLargeur)
+                    .addComponent(jTextFieldOuvertureLargeur, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelOuvertureLinteau)
+                    .addComponent(jComboBoxLinteau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(TabMurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelDistanceMontants)
+                    .addComponent(jTextFieldDistanceMontantsOuverture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(387, Short.MAX_VALUE))
+        );
+
+        jTabbedPaneContainer.addTab("Mur", TabMur);
+
+        jLabelToitAngle.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelToitAngle.setText("Angle");
+
+        jLabelDistanceFerme.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelDistanceFerme.setText("Distance ferme");
+
+        jLabelToitPorteFaux.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelToitPorteFaux.setText("Porte-à-faux");
+
+        jTextFieldToitAngle.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldToitAngle.setText("45");
+        jTextFieldToitAngle.setToolTipText("");
+        jTextFieldToitAngle.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldToitAngle.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldToitAngle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldToitAngleActionPerformed(evt);
+            }
+        });
+
+        jTextFieldDistanceFerme.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldDistanceFerme.setText("24.0");
+        jTextFieldDistanceFerme.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldDistanceFerme.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldDistanceFerme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldDistanceFermeActionPerformed(evt);
+            }
+        });
+
+        jTextFieldToitPorteFaux.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldToitPorteFaux.setText("24.0");
+        jTextFieldToitPorteFaux.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldToitPorteFaux.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldToitPorteFaux.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldToitPorteFauxActionPerformed(evt);
+            }
+        });
+
+        jLabelExtremite.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelExtremite.setText("Distance extrémités");
+
+        jTextFieldExtremite.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldExtremite.setText("24.0");
+        jTextFieldExtremite.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldExtremite.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldExtremite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldExtremiteActionPerformed(evt);
+            }
+        });
+
+        jLabelEntremiseToit.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jLabelEntremiseToit.setText("Distance entremise");
+
+        jTextFieldEntremiseToit.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        jTextFieldEntremiseToit.setText("24.0");
+        jTextFieldEntremiseToit.setMinimumSize(new java.awt.Dimension(100, 23));
+        jTextFieldEntremiseToit.setPreferredSize(new java.awt.Dimension(100, 23));
+        jTextFieldEntremiseToit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldEntremiseToitActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout TabToitLayout = new javax.swing.GroupLayout(TabToit);
+        TabToit.setLayout(TabToitLayout);
+        TabToitLayout.setHorizontalGroup(
+            TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabToitLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(TabToitLayout.createSequentialGroup()
+                            .addComponent(jLabelToitPorteFaux)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                            .addComponent(jTextFieldToitPorteFaux, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(TabToitLayout.createSequentialGroup()
+                            .addComponent(jLabelToitAngle)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldToitAngle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(TabToitLayout.createSequentialGroup()
+                        .addComponent(jLabelDistanceFerme)
+                        .addGap(63, 63, 63)
+                        .addComponent(jTextFieldDistanceFerme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(TabToitLayout.createSequentialGroup()
+                        .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelExtremite)
+                            .addComponent(jLabelEntremiseToit))
+                        .addGap(31, 31, 31)
+                        .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldEntremiseToit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldExtremite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(116, Short.MAX_VALUE))
+        );
+        TabToitLayout.setVerticalGroup(
+            TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TabToitLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelToitAngle)
+                    .addComponent(jTextFieldToitAngle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59)
+                .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldToitPorteFaux, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelToitPorteFaux))
+                .addGap(48, 48, 48)
+                .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelDistanceFerme)
+                    .addComponent(jTextFieldDistanceFerme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelExtremite)
+                    .addComponent(jTextFieldExtremite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(TabToitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelEntremiseToit)
+                    .addComponent(jTextFieldEntremiseToit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(499, Short.MAX_VALUE))
+        );
+
+        jTabbedPaneContainer.addTab("Toit", TabToit);
+
+        javax.swing.GroupLayout jPanelLeftPanelLayout = new javax.swing.GroupLayout(jPanelLeftPanel);
+        jPanelLeftPanel.setLayout(jPanelLeftPanelLayout);
+        jPanelLeftPanelLayout.setHorizontalGroup(
+            jPanelLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelLeftPanelLayout.createSequentialGroup()
+                .addComponent(jTabbedPaneContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 20, Short.MAX_VALUE))
+        );
+        jPanelLeftPanelLayout.setVerticalGroup(
+            jPanelLeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLeftPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPaneContainer)
+                .addContainerGap())
+        );
+
+        jPanelMainPanel.add(jPanelLeftPanel, java.awt.BorderLayout.WEST);
+
+        jMenuFichier.setText("Fichier");
+
+        jMenuItemNouveau.setText("Nouveau");
+        jMenuItemNouveau.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNouveauActionPerformed(evt);
+            }
+        });
+        jMenuFichier.add(jMenuItemNouveau);
+        jMenuFichier.add(jSeparator1);
+
+        jMenuItemOuvrir.setText("Ouvrir...");
+        jMenuItemOuvrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemOuvrirActionPerformed(evt);
+            }
+        });
+        jMenuFichier.add(jMenuItemOuvrir);
+        jMenuFichier.add(jSeparator2);
+
+        jMenuItemEnregistrer.setText("Enregistrer");
+        jMenuItemEnregistrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEnregistrerActionPerformed(evt);
+            }
+        });
+        jMenuFichier.add(jMenuItemEnregistrer);
+
+        jMenuExporterPieces.setText("Exporter les pièces");
+        jMenuExporterPieces.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuExporterPiecesActionPerformed(evt);
+            }
+        });
+        jMenuFichier.add(jMenuExporterPieces);
+        jMenuFichier.add(jSeparator3);
+
+        jMenuItemQuitter.setText("Quitter");
+        jMenuItemQuitter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemQuitterActionPerformed(evt);
+            }
+        });
+        jMenuFichier.add(jMenuItemQuitter);
+
+        jMenuBar.add(jMenuFichier);
+
+        jMenuEdition.setText("Édition");
+
+        jMenuAnnuler.setText("Annuler (undo)");
+        jMenuAnnuler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuAnnulerActionPerformed(evt);
+            }
+        });
+        jMenuEdition.add(jMenuAnnuler);
+
+        jMenuRetablir.setText("Rétablir (redo)");
+        jMenuRetablir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuRetablirActionPerformed(evt);
+            }
+        });
+        jMenuEdition.add(jMenuRetablir);
+
+        jMenuItemClearMemLeak.setText("[DEV] ClearMemLeak");
+        jMenuItemClearMemLeak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemClearMemLeakActionPerformed(evt);
+            }
+        });
+        jMenuEdition.add(jMenuItemClearMemLeak);
+
+        jMenuBar.add(jMenuEdition);
+
+        setJMenuBar(jMenuBar);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelMainPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelMainPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItemQuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuitterActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItemQuitterActionPerformed
+
+    private void jMenuAnnulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAnnulerActionPerformed
+        controller.undo();
+    }//GEN-LAST:event_jMenuAnnulerActionPerformed
+
+    private void jMenuRetablirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRetablirActionPerformed
+        controller.redo();
+    }//GEN-LAST:event_jMenuRetablirActionPerformed
+
+    private void jMenuItemEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEnregistrerActionPerformed
+
+        int sauvegarde = saveFile.showSaveDialog(this);
+
+        if (sauvegarde == JFileChooser.APPROVE_OPTION) {
+
+            try {
+                FileOutputStream fileOut = new FileOutputStream(saveFile.getSelectedFile().toString() + ".ser");
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(controller.getCabanon());
+                out.close();
+                fileOut.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jMenuItemEnregistrerActionPerformed
+
+    private void jTextFieldCabanonLongueurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCabanonLongueurActionPerformed
+        String input = jTextFieldCabanonLongueur.getText();
+        double cabanonLongueurFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.setCabanonLongueur(cabanonLongueurFormatted);
+        controller.getCabanon().getPlancher().setLongueur(cabanonLongueurFormatted);
+        controller.getCabanon().getToitDessus().setLongueur(cabanonLongueurFormatted);
+        controller.getCabanon().getToit().destroyPoutres(getDRAWING_PANEL_WIDTH());
+
+    }//GEN-LAST:event_jTextFieldCabanonLongueurActionPerformed
+
+    private void jTextFieldCabanonLargeurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCabanonLargeurActionPerformed
+//        cabanonLargeurField = Double.parseDouble(jTextFieldCabanonLargeur.getText());
+//        controller.setCabanonLargeur(cabanonLargeurField);
+//        // controller.setLargeurPlancher(cabanonLargeurField);
+
+        // CODE À UTILISER POUR POUVOIR UTILISER LE FORMAT 30 4/5 -> AJUSTER CHAQUE FIELD POUR UTILISER LA FONCTION CONVERTPOUCEFORMAT DU UTIL
+        String input = jTextFieldCabanonLargeur.getText();
+        double cabanonLargeurFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.setCabanonLargeur(cabanonLargeurFormatted);
+        controller.getCabanon().getPlancher().setLargeur(cabanonLargeurFormatted);
+        controller.getCabanon().getToitDessus().setLargeur(cabanonLargeurFormatted);
+    }//GEN-LAST:event_jTextFieldCabanonLargeurActionPerformed
+
+    private void jTextFieldCabanonHauteurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCabanonHauteurActionPerformed
+        String input = jTextFieldCabanonHauteur.getText();
+        double cabanonHauteurFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.setCabanonHauteur(cabanonHauteurFormatted);
+    }//GEN-LAST:event_jTextFieldCabanonHauteurActionPerformed
+
+    private void jTextFieldDistanceSolivesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDistanceSolivesActionPerformed
+        String input = jTextFieldDistanceSolives.getText();
+        double plancherDistanceSolivesFormatted = util.convertPouceFormat(input);
+        //controller.setdistSolivePlancher(plancherDistanceSolivesFormatted);
+        controller.updateCabanon();
+        controller.getCabanon().getPlancher().setdistEntreSolive(plancherDistanceSolivesFormatted);
+    }//GEN-LAST:event_jTextFieldDistanceSolivesActionPerformed
+
+    private void jTextFieldDistanceMontantsOuvertureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDistanceMontantsOuvertureActionPerformed
+        String input = jTextFieldDistanceMontantsOuverture.getText();
+        double distanceMontantsOuvertureMurFormatted = util.convertPouceFormat(input);
+
+        if (controller.getSelectedMur(vueSelection).getSelectedOuverture() != null) {
+            controller.updateCabanon();
+            controller.getSelectedMur(vueSelection).getSelectedOuverture().setDistanceMontantOuv(distanceMontantsOuvertureMurFormatted);
+        }
+
+    }//GEN-LAST:event_jTextFieldDistanceMontantsOuvertureActionPerformed
+
+    private void jTextFieldOuvertureHauteurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldOuvertureHauteurActionPerformed
+        String input = jTextFieldOuvertureHauteur.getText();
+        double ouvertureLargeurFormatted = util.convertPouceFormat(input);
+        if (controller.getSelectedMur(vueSelection).getSelectedOuverture() != null) {
+            controller.updateCabanon();
+            controller.getSelectedMur(vueSelection).getSelectedOuverture().setLargeurOuverture(ouvertureLargeurFormatted);
+        }
+    }//GEN-LAST:event_jTextFieldOuvertureHauteurActionPerformed
+
+    private void jTextFieldOuvertureLargeurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldOuvertureLargeurActionPerformed
+        String input = jTextFieldOuvertureLargeur.getText();
+        double ouvertureLongueurFormatted = util.convertPouceFormat(input);
+        if (controller.getSelectedMur(vueSelection).getSelectedOuverture() != null) {
+            controller.updateCabanon();
+            controller.getSelectedMur(vueSelection).getSelectedOuverture().setLongueurOuverture(ouvertureLongueurFormatted);
+        }
+    }//GEN-LAST:event_jTextFieldOuvertureLargeurActionPerformed
+
+    private void jComboBoxLinteauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLinteauActionPerformed
+        Object selectedItem = jComboBoxLinteau.getSelectedItem();
+        if (selectedItem != null) {
+            linteauSize = selectedItem.toString();
+            double linteauHauteur = Double.parseDouble(linteauSize.substring(2));
+            if (controller.getSelectedMur(vueSelection).getSelectedOuverture() != null) {
+                controller.updateCabanon();
+                controller.getSelectedMur(vueSelection).getSelectedOuverture().setHauteurLinteau(linteauHauteur);
+            }
+        }
+    }//GEN-LAST:event_jComboBoxLinteauActionPerformed
+    private void jMenuItemNouveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNouveauActionPerformed
+
+        this.dispose();
+        controller = CabanonController.getnewInstance();
+
+        Cabanator.gui.frames.MainWindow mainWindow = new Cabanator.gui.frames.MainWindow();
+        mainWindow.setDefaultInformation();
+        mainWindow.setVisible(true);
+        drawingPanel.repaint();
+    }//GEN-LAST:event_jMenuItemNouveauActionPerformed
+
+    private void jTextFieldDistanceMontantsMurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDistanceMontantsMurActionPerformed
+        String input = jTextFieldDistanceMontantsMur.getText();
+        double distanceMontantsMurFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.getSelectedMur(vueSelection).setDistanceMontantMur(distanceMontantsMurFormatted);
+        controller.getSelectedMur(vueSelection).destroyMontants();
+    }//GEN-LAST:event_jTextFieldDistanceMontantsMurActionPerformed
+
+    private void jTextFieldToitAngleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldToitAngleActionPerformed
+        angle = Double.parseDouble(jTextFieldToitAngle.getText());
+        controller.updateCabanon();
+        controller.getCabanon().getToit().setAngleToit(angle);
+        controller.getCabanon().getToit().destroyPoutres(getDRAWING_PANEL_WIDTH());
+
+        /*controller.getCabanon().getToit().setCoteGaucheToit();
+        controller.getCabanon().getToit().setCoteDroitToit();
+        controller.getCabanon().getToit().setBaseToit();*/
+    }//GEN-LAST:event_jTextFieldToitAngleActionPerformed
+
+    private void jTextFieldToitPorteFauxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldToitPorteFauxActionPerformed
+        String input = jTextFieldToitPorteFaux.getText();
+        double toitPorteFauxFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.getCabanon().getToit().setTaillePorteAFaux(toitPorteFauxFormatted);
+        //controller.getCabanon().setTaillePorteAFaux(toitPorteFauxFormatted);
+        controller.getCabanon().getToit().clearPolygons();
+        controller.getCabanon().getToitDessus().setPorteAFaux(toitPorteFauxFormatted);
+        controller.getCabanon().getToitDessus().destroyFermes();
+        /*controller.getCabanon().getToit().setCoteGaucheToit();
+        controller.getCabanon().getToit().setCoteDroitToit();
+        controller.getCabanon().getToit().setBaseToit();*/
+    }//GEN-LAST:event_jTextFieldToitPorteFauxActionPerformed
+
+    private void jTextFieldDistanceFermeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDistanceFermeActionPerformed
+        String input = jTextFieldDistanceFerme.getText();
+        double distanceFermeFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.getCabanon().getToitDessus().setdistEntreFermes(distanceFermeFormatted);
+        controller.getCabanon().getToitDessus().destroyFermes();
+    }//GEN-LAST:event_jTextFieldDistanceFermeActionPerformed
+
+    private void jComboBoxChoisirOuvertureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxChoisirOuvertureActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxChoisirOuvertureActionPerformed
+
+    private void jToggleAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleAjouterActionPerformed
+
+        this.setMode(ApplicationMode.ADD);
+        jComboBoxChoisirOuverture.setVisible(true);
+    }//GEN-LAST:event_jToggleAjouterActionPerformed
+
+    private void jToggleSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleSupprimerActionPerformed
+        this.setMode(ApplicationMode.DELETE);
+    }//GEN-LAST:event_jToggleSupprimerActionPerformed
+
+    private void jToggleSelectionnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleSelectionnerActionPerformed
+
+        this.setMode(ApplicationMode.SELECT);
+        jComboBoxChoisirOuverture.setVisible(false);
+    }//GEN-LAST:event_jToggleSelectionnerActionPerformed
+
+    private void jToggleAfficherGrilleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleAfficherGrilleActionPerformed
+        isGrilleToggled = !isGrilleToggled;
+        repaint();
+    }//GEN-LAST:event_jToggleAfficherGrilleActionPerformed
+
+    private void SelectionVueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectionVueActionPerformed
+        // TODO add your handling code here:
+        Object selectedItem = SelectionVue.getSelectedItem();
+        if (selectedItem != null) {
+            vueSelection = selectedItem.toString();
+            controller.setCurrentView(selectedItem.toString());
+
+        }
+    }//GEN-LAST:event_SelectionVueActionPerformed
+
+    private void jTextFieldGrilleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldGrilleActionPerformed
+        String input = jTextFieldGrille.getText();
+        BASE_SPACING = (int) util.convertPouceFormat(input);
+    }//GEN-LAST:event_jTextFieldGrilleActionPerformed
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formMouseDragged
+
+    private void drawingPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawingPanelMouseDragged
+        if (SwingUtilities.isRightMouseButton(evt)) {
+
+            delta.setLocation((evt.getX() - this.actualMousePoint.x), (evt.getY() - this.actualMousePoint.y));
+            switch (vueSelection) {
+                case "Mur Nord":
+                    controller.getSelectedMur("Mur Nord").updateSelectedItemsPosition(delta);
+                    controller.getSelectedMur("Mur Nord").updateSelectedItemsPositionEnt(delta);
+                    break;
+                case "Mur Sud":
+                    controller.getSelectedMur("Mur Sud").updateSelectedItemsPosition(delta);
+                    controller.getSelectedMur("Mur Sud").updateSelectedItemsPositionEnt(delta);
+                    break;
+                case "Mur Est":
+                    controller.getSelectedMur("Mur Est").updateSelectedItemsPosition(delta);
+                    controller.getSelectedMur("Mur Est").updateSelectedItemsPositionEnt(delta);
+                    break;
+                case "Mur Ouest":
+                    controller.getSelectedMur("Mur Ouest").updateSelectedItemsPosition(delta);
+                    controller.getSelectedMur("Mur Ouest").updateSelectedItemsPositionEnt(delta);
+                    break;
+                case "Plancher":
+                    controller.getCabanon().getPlancher().updateSelectedItemsPosition(delta);
+                default:
+                    break;
+            }
+
+            this.actualMousePoint = evt.getPoint();
+            drawingPanel.repaint();
+        }
+    }//GEN-LAST:event_drawingPanelMouseDragged
+
+    private void jMenuItemOuvrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOuvrirActionPerformed
+
+        int charger = loadFile.showOpenDialog(this);
+        if (charger == JFileChooser.APPROVE_OPTION) {
+        }
+
+        String fileName = loadFile.getSelectedFile().toString();
+        controller.loadCabanon(fileName);
+    }//GEN-LAST:event_jMenuItemOuvrirActionPerformed
+
+    private void jTextFieldExtremiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldExtremiteActionPerformed
+        // TODO add your handling code here:
+        String input = jTextFieldExtremite.getText();
+        double distanceExtremiteFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.getCabanon().getToitDessus().setDistanceExtremite(distanceExtremiteFormatted);
+        controller.getCabanon().getToitDessus().destroyFermes();
+    }//GEN-LAST:event_jTextFieldExtremiteActionPerformed
+
+    private void jTextFieldEntremiseToitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldEntremiseToitActionPerformed
+        // TODO add your handling code here:
+        String input = jTextFieldEntremiseToit.getText();
+        double distanceEntremiseFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.getCabanon().getToitDessus().setDistanceEntremiseToit(distanceEntremiseFormatted);
+        controller.getCabanon().getToitDessus().destroyFermes();
+    }//GEN-LAST:event_jTextFieldEntremiseToitActionPerformed
+    private void jMenuExporterPiecesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExporterPiecesActionPerformed
+        controller.CsvExporter();
+    }//GEN-LAST:event_jMenuExporterPiecesActionPerformed
+
+    private void jTextFieldTaillePiecesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTaillePiecesActionPerformed
+        String input = jTextFieldTaillePieces.getText();
+        double taillePieceFormatted = util.convertPouceFormat(input);
+        controller.updateCabanon();
+        controller.setCabanonTaillePiece(taillePieceFormatted);
+    }//GEN-LAST:event_jTextFieldTaillePiecesActionPerformed
+
+    private void jMenuItemClearMemLeakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemClearMemLeakActionPerformed
+        controller.clear();
+    }//GEN-LAST:event_jMenuItemClearMemLeakActionPerformed
+
+    private void drawingPanelMouseClicked(java.awt.event.MouseEvent evt) {
+        Point point = evt.getPoint();
+        point = new Point((int) (point.x * controller.getZoomScale()), (int) (point.y * controller.getZoomScale()));
+        this.actualMousePoint = point;
+        jLabelXValueRes.setText(String.valueOf(point.x));
+        jLabelYValueRes.setText(String.valueOf(point.y));
+        String typeAjout = jComboBoxChoisirOuverture.getSelectedItem().toString();
+        if (this.actualMode == ApplicationMode.ADD && !vueSelection.equals("Plancher") && typeAjout != "Entremise") {
+            plancherIsEntremises = false;
+            switch (vueSelection) {
+                case "Mur Nord":
+                    controller.getSelectedMur("Mur Nord").addOuverture(point, typeAjout, controller.getCabanonHauteur());
+                    //drawingPanel.getMurDrawerNord().addOuverture(ouverture);
+                    break;
+                case "Mur Sud":
+                    controller.getSelectedMur("Mur Sud").addOuverture(point, typeAjout, controller.getCabanonHauteur());
+                    // drawingPanel.getMurDrawerSud().addOuverture(ouverture);
+                    break;
+                case "Mur Est":
+                    controller.getSelectedMur("Mur Est").addOuverture(point, typeAjout, controller.getCabanonHauteur());
+                    // drawingPanel.getMurDrawerEst().addOuverture(ouverture);
+                    break;
+                case "Mur Ouest":
+                    controller.getSelectedMur("Mur Ouest").addOuverture(point, typeAjout, controller.getCabanonHauteur());
+                    // drawingPanel.getMurDrawerOuest().addOuverture(ouverture);
+                    break;
+                default:
+
+                    break;
+            }
+        } else if (this.actualMode == ApplicationMode.ADD && !vueSelection.equals("Plancher") && typeAjout == "Entremise") {
+            switch (vueSelection) {
+                case "Mur Nord":
+                    controller.getSelectedMur("Mur Nord").addEntremiseMur(point, controller.getDistanceMontant());
+                    break;
+                case "Mur Sud":
+                    controller.getSelectedMur("Mur Sud").addEntremiseMur(point, controller.getDistanceMontant());
+                    break;
+                case "Mur Est":
+                    controller.getSelectedMur("Mur Est").addEntremiseMur(point, controller.getDistanceMontant());
+                    break;
+                case "Mur Ouest":
+                    controller.getSelectedMur("Mur Ouest").addEntremiseMur(point, controller.getDistanceMontant());
+                    break;
+                default:
+
+                    break;
+            }
+        } else if (this.actualMode == ApplicationMode.ADD && vueSelection.equals("Plancher") && typeAjout == "Entremise") {
+            controller.getCabanon().getPlancher().addEntremise(point, (controller.toPixel(controller.getCabanonLargeur())));
+        } else if (this.actualMode == ApplicationMode.DELETE && vueSelection.equals("Plancher")) {
+            controller.getCabanon().getPlancher().deleteEntremise(point);
+        } else if (this.actualMode == ApplicationMode.SELECT && vueSelection.equals("Plancher")) {
+            controller.getCabanon().getPlancher().selectEntremise(point);
+        } else if (this.actualMode == ApplicationMode.DELETE && !vueSelection.equals("Plancher")) {
+            switch (vueSelection) {
+                case "Mur Nord":
+                    controller.getSelectedMur("Mur Nord").deleteOuverture(point);
+                    controller.getSelectedMur("Mur Nord").deleteEntremise(point);
+                    break;
+                case "Mur Sud":
+                    controller.getSelectedMur("Mur Sud").deleteOuverture(point);
+                    controller.getSelectedMur("Mur Sud").deleteEntremise(point);
+                    break;
+                case "Mur Est":
+                    controller.getSelectedMur("Mur Est").deleteOuverture(point);
+                    controller.getSelectedMur("Mur Est").deleteEntremise(point);
+                    break;
+                case "Mur Ouest":
+                    controller.getSelectedMur("Mur Ouest").deleteOuverture(point);
+                    controller.getSelectedMur("Mur Ouest").deleteEntremise(point);
+                    break;
+                default:
+
+                    break;
+            }
+        } else if (this.actualMode == ApplicationMode.SELECT && !vueSelection.equals("Plancher")) {
+
+            switch (vueSelection) {
+                case "Mur Nord":
+                    controller.getSelectedMur("Mur Nord").selectOuverture(point);
+                    controller.getSelectedMur("Mur Nord").selectEntremise(point);
+                    break;
+                case "Mur Sud":
+                    controller.getSelectedMur("Mur Sud").selectOuverture(point);
+                    controller.getSelectedMur("Mur Sud").selectEntremise(point);
+                    break;
+                case "Mur Est":
+                    controller.getSelectedMur("Mur Est").selectOuverture(point);
+                    controller.getSelectedMur("Mur Est").selectEntremise(point);
+                    break;
+                case "Mur Ouest":
+                    controller.getSelectedMur("Mur Ouest").selectOuverture(point);
+                    controller.getSelectedMur("Mur Ouest").selectEntremise(point);
+                    break;
+                default:
+
+                    break;
+            }
+        } else if (this.actualMode == ApplicationMode.SELECT && SwingUtilities.isLeftMouseButton(evt)) {
+
+        }
+        repaint();
+
+    }
+
+    private void setDefaultInformation() {
+//        this.jTextFieldCabanonHauteur.setText(Double.toString(Math.floor(this.controller.toPixel(controller.getCabanon().getHauteur()))));
+//        this.jTextFieldCabanonLargeur.setText(Double.toString(Math.floor(this.controller.toPixel(controller.getCabanon().getLargeur()))));
+//        this.jTextFieldCabanonLongueur.setText(Double.toString(Math.floor(this.controller.toPixel(controller.getCabanon().getLongueur()))));
+//        this.jTextFieldDistanceSolives.setText(Double.toString(Math.floor(this.controller.toPixel(controller.getCabanon().getDistanceSolives()))));
+
+        this.jTextFieldCabanonHauteur.setText(Double.toString(192));
+        this.jTextFieldCabanonLargeur.setText(Double.toString(192));
+        this.jTextFieldCabanonLongueur.setText(Double.toString(192));
+        this.jTextFieldDistanceSolives.setText(Double.toString(48));
+
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainWindow().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> SelectionVue;
+    private javax.swing.JPanel TabCabanon;
+    private javax.swing.JPanel TabMur;
+    private javax.swing.JPanel TabPlancher;
+    private javax.swing.JPanel TabToit;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private Cabanator.gui.panels.DrawingPanel drawingPanel;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.JComboBox<String> jComboBoxChoisirOuverture;
+    private javax.swing.JComboBox<String> jComboBoxLinteau;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabelCabanonHauteur;
+    private javax.swing.JLabel jLabelCabanonLargeur;
+    private javax.swing.JLabel jLabelCabanonLongueur;
+    private javax.swing.JLabel jLabelChoixVue;
+    private javax.swing.JLabel jLabelDistanceFerme;
+    private javax.swing.JLabel jLabelDistanceMontants;
+    private javax.swing.JLabel jLabelDistanceMontantsMur;
+    private javax.swing.JLabel jLabelDistanceSolives;
+    private javax.swing.JLabel jLabelEntremiseToit;
+    private javax.swing.JLabel jLabelExtremite;
+    private javax.swing.JLabel jLabelOuvertureHauteur;
+    private javax.swing.JLabel jLabelOuvertureLargeur;
+    private javax.swing.JLabel jLabelOuvertureLinteau;
+    private javax.swing.JLabel jLabelTaillePieces;
+    private javax.swing.JLabel jLabelToitAngle;
+    private javax.swing.JLabel jLabelToitPorteFaux;
+    private javax.swing.JLabel jLabelXValue;
+    private javax.swing.JLabel jLabelXValueRes;
+    private javax.swing.JLabel jLabelYValueRes;
+    private javax.swing.JMenuItem jMenuAnnuler;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenu jMenuEdition;
+    private javax.swing.JMenuItem jMenuExporterPieces;
+    private javax.swing.JMenu jMenuFichier;
+    private javax.swing.JMenuItem jMenuItemClearMemLeak;
+    private javax.swing.JMenuItem jMenuItemEnregistrer;
+    private javax.swing.JMenuItem jMenuItemNouveau;
+    private javax.swing.JMenuItem jMenuItemOuvrir;
+    private javax.swing.JMenuItem jMenuItemQuitter;
+    private javax.swing.JMenuItem jMenuRetablir;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelLeftPanel;
+    private javax.swing.JPanel jPanelMainPanel;
+    private javax.swing.JPanel jPanelbuttonTopPanel;
+    private javax.swing.JScrollPane jScrollMainScrollPane;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JTabbedPane jTabbedPaneContainer;
+    private javax.swing.JTextField jTextFieldCabanonHauteur;
+    private javax.swing.JTextField jTextFieldCabanonLargeur;
+    private javax.swing.JTextField jTextFieldCabanonLongueur;
+    private javax.swing.JTextField jTextFieldDistanceFerme;
+    private javax.swing.JTextField jTextFieldDistanceMontantsMur;
+    private javax.swing.JTextField jTextFieldDistanceMontantsOuverture;
+    private javax.swing.JTextField jTextFieldDistanceSolives;
+    private javax.swing.JTextField jTextFieldEntremiseToit;
+    private javax.swing.JTextField jTextFieldExtremite;
+    private javax.swing.JTextField jTextFieldGrille;
+    private javax.swing.JTextField jTextFieldOuvertureHauteur;
+    private javax.swing.JTextField jTextFieldOuvertureLargeur;
+    private javax.swing.JTextField jTextFieldTaillePieces;
+    private javax.swing.JTextField jTextFieldToitAngle;
+    private javax.swing.JTextField jTextFieldToitPorteFaux;
+    private javax.swing.JToggleButton jToggleAfficherGrille;
+    private javax.swing.JToggleButton jToggleAjouter;
+    private javax.swing.JToggleButton jToggleSelectionner;
+    private javax.swing.JToggleButton jToggleSupprimer;
+    // End of variables declaration//GEN-END:variables
+}

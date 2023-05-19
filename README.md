@@ -18,11 +18,7 @@ Les fonctionnalités pour chaque composante du cabanon sontt énumérées ci-bas
 - Afficher (ou non) la grille et définir sa taille.
 - Définir le mode d'interaction avec les accessoires (sélection, ajout, suppression).
 
-![cabanon](Images/cabanon.png)
-
-
-
-
+![cabanon](pictures/cabanon.png)
 
 ### Murs
 

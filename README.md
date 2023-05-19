@@ -18,7 +18,7 @@ Les fonctionnalités pour chaque composante du cabanon sontt énumérées ci-bas
 - Afficher (ou non) la grille et définir sa taille.
 - Définir le mode d'interaction avec les accessoires (sélection, ajout, suppression).
 
-![cabanon](pictures/cabanon.png)
+![cabanon]([pictures/cabanon.png](https://github.com/psopsopso/Cabanator/blob/main/Pictures/cabanon.png?raw=true))
 
 ### Murs
 

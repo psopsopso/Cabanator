@@ -10,15 +10,15 @@ Le projet consiste à produire une application permettant à un utilisateur de m
 
 Les fonctionnalités pour chaque composante du cabanon sontt énumérées ci-bas. 
 
-## Cabanon
+## Panneau principal / Cabanon
 
-- Choix de la vue : 
--- Mur (Nord, Sud, Est ou Ouest);
--- Plancher;
--- Toit (devant, face);
-
+- Choix de la vue : mur (Nord, Sud, Est ou Ouest), plancher, toit (devant, face).
 - Définir la largeur, la hauteur et la longueur du cabanon.
-- 
+- Définir la taille maximale des pièces (192 pouces, soit 12 pieds par défaut).
+- Afficher (ou non) la grille et définir sa taille.
+- Définir le mode d'interaction avec les accessoires (sélection, ajout, suppression).
+
+![cabanon](Images/cabanon.png)
 
 
 

@@ -22,6 +22,8 @@ Les fonctionnalités pour chaque composante du cabanon sontt énumérées ci-bas
 
 ### Murs
 
+![mur](./pictures/mur.png)
+
 ### Accessoires (portes et fenêtres)
 
 ### Plancher

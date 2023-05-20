@@ -22,13 +22,19 @@ Les fonctionnalités pour chaque composante du cabanon sontt énumérées ci-bas
 
 ### Murs
 
-![mur](./pictures/mur.png)
+![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/mur.png?raw=true)
 
-### Accessoires (portes et fenêtres)
 
 ### Plancher
 
+![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/plancher.png?raw=true)
+
 ### Toit
+
+![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/toitdessus.png?raw=true)
+
+
+![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/toitdevant.png?raw=true)
 
 ### Fonctionnalités supplémentaires / générales
 

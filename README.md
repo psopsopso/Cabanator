@@ -1,4 +1,4 @@
-#Cabanator
+# Cabanator
 
 Projet réalisé dans le cadre du cours Génie logiciel orienté objet / Analyse et conception des systèmes orientés objets (GLO-2004 / IFT-2007) du Baccalauréat en Informatique de l'Université Laval.
 
@@ -32,10 +32,10 @@ Les fonctionnalités pour chaque composante du cabanon sontt énumérées ci-bas
 
 ### Plancher
 
-![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/plancher.png?raw=true)
-
 - Définir la distance entre les solives.
 - Ajouter, sélectionner, déplacer ou supprimer les entremises.
+
+![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/plancher.png?raw=true)
 
 ### Toit
 

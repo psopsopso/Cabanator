@@ -1,6 +1,8 @@
- Cabanator
+#Cabanator
 
 Projet réalisé dans le cadre du cours Génie logiciel orienté objet / Analyse et conception des systèmes orientés objets (GLO-2004 / IFT-2007) du Baccalauréat en Informatique de l'Université Laval.
+
+Technologies utilisées : Java et Java Swing.
 
 ## Introduction
 
@@ -22,17 +24,31 @@ Les fonctionnalités pour chaque composante du cabanon sontt énumérées ci-bas
 
 ### Murs
 
-![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/mur.png?raw=true)
+- Définir la distance entre les montants.
+- Pour l'ouverture sélectionnée, définir sa hauteur, sa largeur, le choix de matériel du linteau (2x6, 2x8 ou 2x10) ainsi que la distance entre les montants supérieurs et inférieurs à l'ouverture (ces montants sont distincts des montants spécifiques au mur).
+- Ajouter, sélectionner, déplacer ou supprimer les ouvertures.
 
+![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/mur.png?raw=true)
 
 ### Plancher
 
 ![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/plancher.png?raw=true)
 
+- Définir la distance entre les solives.
+- Ajouter, sélectionner, déplacer ou supprimer les entremises.
+
 ### Toit
+
+- Définir l'angle du toit.
+- Définir la longueur du porte-à-faux.
+- Définir la distance entre les fermes.
+- Définir la distance entre les entremises.
+
+Vue de dessus:
 
 ![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/toitdessus.png?raw=true)
 
+Vue de devant:
 
 ![cabanon](https://github.com/psopsopso/Cabanator/blob/main/Pictures/toitdevant.png?raw=true)
 
